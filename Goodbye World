@@ -1,0 +1,25 @@
+using System;
+
+namespace Lab_1
+{
+    class goodbyeWorld
+    {
+        static void Main(string[] args)
+        {
+            //This is a program to create the logo for 
+            //the Dead Gamer company
+
+            Console.WriteLine("Goodbye World!\n" +  //Displays message and
+                "\n" +                              //logo in console
+                "---------\n" +
+                "|       |\n" +
+                "|     (;_;)\n" +
+                "|       |\n" +
+                "|      /|\\\n" +
+                "|     / | \\\n" +
+                "|      / \\\n" +
+                "|    _/   \\_\n" +
+                "|__________________");
+        }
+    }
+}
