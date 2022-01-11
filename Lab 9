@@ -1,0 +1,94 @@
+using System;
+
+namespace Lab_9
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            UserCalculator();
+        }
+
+        static void UserCalculator()
+        {
+            string run = "yes";
+            while (run == "yes")
+            {
+                try
+                {
+                    Console.Write("\nPlease enter your first integer: ");
+                    int firstNum = Convert.ToInt32(Console.ReadLine());
+                    Console.Write("Please enter your second integer: ");
+                    int secondNum = Convert.ToInt32(Console.ReadLine());
+
+                    string operation = "start";
+                    while (operation != "done" && operation != "+" && operation != "-" && operation != "*" && operation != "/")
+                    {
+                        Console.Write("Please enter your operation ( + , - , * , or / ) or type \"Done\": ");
+                        operation = Console.ReadLine();
+                        operation = operation.ToLower();   
+                    }
+
+                    if (operation == "+" || operation == "-" || operation == "*" || operation == "/")
+                    {
+                        Console.WriteLine(CalcNums(operation, firstNum, secondNum));
+                    }
+
+                    string tempString = "0";
+                    while (tempString != "no" && tempString != "yes")
+                    {
+                        Console.Write("\nWould you like to continue? (Yes or No): ");
+                        tempString = Console.ReadLine();
+                        tempString = tempString.ToLower();
+                        run = tempString;
+
+                        if (tempString == "no")
+                        {
+                            Console.WriteLine("\nThank you for using this calculator!");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("{0}", ex.Message);
+                }
+            }
+        }
+
+        static string CalcNums(string operation, int firstNum, int secondNum)
+        {
+            switch (operation)
+            {
+                case "+":
+                {
+                    int result = firstNum + secondNum;
+                    string returnString = String.Format("The sum of {0} and {1} is: {2}", firstNum, secondNum, result);
+                    return returnString;
+                }
+                case "-":
+                {
+                    int result = firstNum - secondNum;
+                    string returnString = String.Format("The difference of {0} and {1} is: {2}", firstNum, secondNum, result);
+                    return returnString;
+                }
+                case "*":
+                {
+                    int result = firstNum * secondNum;
+                    string returnString = String.Format("The product of {0} and {1} is: {2}", firstNum, secondNum, result);
+                    return returnString;
+                }
+                case "/":
+                {
+                    int result = firstNum / secondNum;
+                    int mod = firstNum % secondNum;
+                    string returnString = String.Format("The quotient of {0} and {1} is: {2} and {3}/{4}", firstNum, secondNum, result, mod, secondNum);
+                    return returnString;
+                }
+                default:
+                {
+                    return "This shouldn't happen";
+                }
+            }
+        }
+    }
+}
