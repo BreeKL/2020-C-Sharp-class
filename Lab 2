@@ -1,0 +1,61 @@
+using System;
+
+namespace Lab_2                 //This code will take in the customer's information and number of cats to purchase
+{                               //and will print the receipt in the console
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string firstName = "";
+            string lastName = "";
+            string streetAddress = "";
+            string city = "";
+            string state = "";
+            string zip = "";
+            int numberOfCats = 0;
+            decimal PRICE_OF_CATS = 545.25m;
+            decimal SALES_TAX = .083m;
+            decimal sumOfPurchase = 0m;
+            decimal totalTax = 0m;
+            decimal totalTaxRounded = 0m;
+            decimal totalAmount = 0m;
+            decimal totalAmountRounded = 0;
+
+            Console.Write("First name: ");
+            firstName = Console.ReadLine();
+            Console.Write("\nLast name: ");         //Will take in customer's name
+            lastName = Console.ReadLine();
+            Console.Write("\nStreet address: ");
+            streetAddress = Console.ReadLine();
+            Console.Write("\nCity: ");
+            city = Console.ReadLine();
+            Console.Write("\nState: ");
+            state = Console.ReadLine();
+            Console.Write("\nZip code: ");          //Will take in customer's address
+            zip = Console.ReadLine();
+            Console.Write("\nNumber of cats: ");    //Will take in the number of cats to purchase
+            numberOfCats = Convert.ToInt32(Console.ReadLine());     //Changes string data from ReadLine to an integer
+
+            sumOfPurchase = numberOfCats * PRICE_OF_CATS;       //Calculates the purchase total
+            totalTax = sumOfPurchase * SALES_TAX;               //Calculates the total tax
+            totalTaxRounded = Decimal.Round(totalTax, 2);       //Rounds the tax amount to two decimals
+            totalAmount = sumOfPurchase + totalTax;             //Calulates the final amount
+            totalAmountRounded = Decimal.Round(totalAmount, 2); //Rounds the final amount to two decimals
+
+            Console.WriteLine("\n**************************************");
+            Console.WriteLine("Customer name:    {0} {1}", firstName, lastName);
+            Console.WriteLine("Customer address: {0} \n\t\t  {1}, {2} {3}", streetAddress, city, state, zip);
+            Console.WriteLine("");
+            Console.WriteLine("Sales:\n");
+            Console.WriteLine("Number of cats sold: {0}\n", numberOfCats);
+            Console.WriteLine("Subtotal:            ${0}", sumOfPurchase);
+            Console.WriteLine("Sales Tax:           $ {0}", totalTaxRounded);
+            Console.WriteLine("Total:               ${0}", totalAmountRounded);
+            Console.WriteLine("");
+            Console.WriteLine("Thank you for your business!");
+            Console.WriteLine("****************************************");              //Prints receipt to console
+            Console.ReadKey();
+
+        }
+    }
+}
