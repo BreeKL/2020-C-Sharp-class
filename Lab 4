@@ -1,0 +1,116 @@
+using System;
+
+class PayrollSystemUpgrade
+{
+    // Declare Variables for Employee Info
+    public static string employeeName, employeeType, tempString;
+    public static double hoursWorked, payRate, grossIncome, commissionAmount, commission, netPay, 
+                         federalTaxRate, minusFederal;
+
+    static void Main()
+    {
+        // Greet User
+        Console.WriteLine("Hello there and welcome to the Employee Information Program");
+        // Call Method to take employee input
+        TakeEmployeeInput();
+        // Call Method to calcuate info based on user input
+        CalculateInfo();
+        // Call method to display info
+        DisplayInfo();
+        // Ensure that user has a good day
+        Console.WriteLine("Have a nice day!");
+    }
+
+    // Method for taking in user input
+    public static void TakeEmployeeInput()
+    {
+        Console.Write("Input Employee Name: ");
+        employeeName = Console.ReadLine();
+        Console.Write("Input type of employment (Hourly, Salary, or Commission): ");
+        tempString = Console.ReadLine();
+        // In order to allow for variance of case of entries, make all entries lowercase
+        employeeType = tempString.ToLower();
+
+        // Switch determines which payroll method to use for the given employee type
+        switch (employeeType)
+        {
+            case "hourly":
+                CalculateHourlyPay();
+                break;
+
+            case "salary":
+                CalculateSalariedPay();
+                break;
+
+            case "commission":
+                CalculateCommissionedPay();
+                break;
+
+            default:
+                Console.WriteLine("Invalid entry.");
+                break;
+
+        }
+
+    }
+
+    // Method to calculate gross income for an hourly employee
+    public static void CalculateHourlyPay()
+    {
+        Console.Write("Input Hours Worked: ");
+        hoursWorked = Double.Parse(Console.ReadLine());
+        Console.Write("Input rate of pay: ");
+        payRate = Double.Parse(Console.ReadLine());
+        grossIncome = hoursWorked * payRate;
+    }
+
+    // Method to calculate gross income for a salaried employee
+    public static void CalculateSalariedPay()
+    {
+        Console.Write("Input monthly salary: ");
+        grossIncome = Double.Parse(Console.ReadLine());
+    }
+
+    // Method to calculate gross income for a commissioned employee
+    public static void CalculateCommissionedPay()
+    {
+        Console.Write("Input amount sold: ");
+        commissionAmount = Double.Parse(Console.ReadLine());
+        commission = commissionAmount >= 10000 ? .1 : .05;
+        grossIncome = commissionAmount * commission;
+    }
+
+    // Calcuate federal tax based on gross income
+    public static void CalculateInfo()
+    {
+        if (grossIncome <= 2000)
+        {
+            federalTaxRate = .15;
+        }
+        else if (grossIncome <=4000)
+        {
+            federalTaxRate = .2;
+        }
+        else
+        {
+            federalTaxRate = .25;
+        }
+
+        minusFederal = grossIncome * federalTaxRate;
+        netPay = grossIncome - minusFederal;
+
+    }
+
+    // Display all relevant information to our user
+    public static void DisplayInfo()
+    {
+        Console.WriteLine("\n********************************************");
+        Console.WriteLine("Employee Name: {0:C}", employeeName);
+        Console.WriteLine("Calculated Gross Income: {0:C}", grossIncome);
+        Console.WriteLine("Federal Withholding Tax: {0:C}", minusFederal);
+        Console.WriteLine("Net Pay: {0:C}", netPay);
+        Console.WriteLine("********************************************\n");
+    }
+
+}
+
