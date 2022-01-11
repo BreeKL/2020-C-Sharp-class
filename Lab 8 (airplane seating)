@@ -1,0 +1,254 @@
+using System;
+
+namespace Lab_8
+{
+    class MainProgram
+    {
+        //This program displays the seating availability for the airplane, 
+        //and allows users to make and cancel reservations
+        static void Main(string[] args)
+        {
+            //Begin program
+            OfferMenu();
+            Console.ReadKey();
+        }
+
+        //Displays menu, ensures correct user input, and navigates options
+        static void OfferMenu()
+        {
+            //Display greeting and initial availablity
+            SeatingArrangment seats = new SeatingArrangment();
+            Console.WriteLine("Welcome to the Fly Geek Airline Company reservation system!");
+            Console.WriteLine("Here is the current seating availability: ");
+            Console.WriteLine("(An O marks an open seat, and a X marks a reserved seat)\n" + seats);
+
+            //initialize value for while loop
+            int choice = 0;
+
+            //Displays menu until user enters "4" to exit, navigates options in menu
+            while ((choice >= 0) && (choice <= 3))
+            {
+                //Menu
+                Console.WriteLine("If you would like to reserve a seat..............press 1\n" +
+                              "If you would like to cancel a reservation........press 2\n" +
+                              "If you would like to update the seating display..press 3\n" +
+                              "Or, if you would like to exit the program........press 4\n");
+
+                //Make sure user entered a number
+                bool tempBool = Int32.TryParse(Console.ReadLine(), out choice);
+
+                //Display menu again if user did not enter a number
+                if (tempBool == false)
+                {
+                    Console.WriteLine("\nYou did not enter a valid option, please try again:\n");
+                    choice = 0;
+                }
+
+                //Navigate menu items if user entered a number
+                if (tempBool == true)
+                {
+                    switch (choice)
+                    {
+                        //Make reservation
+                        case 1:
+                            Console.WriteLine(seats.MakeReservation(ReserveUserSeat()));
+                            Console.WriteLine(seats);
+                            break;
+
+                        //Cancel reservation
+                        case 2:
+                            Console.WriteLine(seats.CancelReservation(CancelUserSeat()));
+                            Console.WriteLine(seats);
+                            break;
+
+                        //Display menu
+                        case 3:
+                            Console.WriteLine(seats);
+                            break;
+
+                        //Exit menu
+                        case 4:
+                            Console.WriteLine("\nThank you, have a nice day");
+                            break;
+
+                        //Display menu again if user didn't enter a valid number
+                        default:
+                            Console.WriteLine("\nYou did not enter a valid number, please try again:\n");
+                            choice = 0;
+                            break;
+                    }
+                }
+            }
+        }
+
+        //Makes SelectSeats() display text about the reservation
+        static int[] ReserveUserSeat()
+        {
+            string seatType = "reserve";
+            return SelectSeats(seatType);
+        }
+
+        //Makes SelectSeats() display text about the cancellation
+        static int[] CancelUserSeat()
+        {
+            string seatType = "cancel";
+            return SelectSeats(seatType);
+        }
+
+        //Takes user input about which seat they would like to reserve or cancel, 
+        //and returns an integer array with the location of their choice
+        static int[] SelectSeats(string seatType)
+        {
+            string tempString;
+            //Gives an out of bounds initializer as a way to check for errors
+            int[] seatArray = new int[2] { 9, 9 };
+            int intSeat;
+
+            //Ask user for row, stores it, and checks if the user entered a number
+            Console.WriteLine("\nWhich row would you like to {0} a seat in? (1-5)", seatType);
+            tempString = Console.ReadLine();
+            Int32.TryParse(tempString, out int row);
+            
+            //If user entered a valid number for the row, ask for the seat
+            if ((row >= 1) && (row <= 5))
+            {
+                //Asks user for seat, and checks if they enter a character
+                Console.WriteLine("Which seat would you like to {0} in row {1}? (A-F)", seatType, row);
+                Char.TryParse(Console.ReadLine(), out char seat);
+                //Make character lowercase to make checking for validity easier
+                seat = char.ToLower(seat);
+
+                //If user enters valid character, return array with location of seat
+                if ((seat >= 97) && (seat <= 102))
+                {
+                    row -= 1;
+                    intSeat = seat - 97;
+                    seatArray[0] = row;
+                    seatArray[1] = intSeat;
+                    return seatArray;
+                }
+                else
+                {
+                    //Returns error array [9,9]
+                    return seatArray;
+                }
+            }
+            else
+            {
+                //Returns error array [9,9]
+                return seatArray;
+            }                
+        }
+    }
+}
+
+--------------------------------------------------------------------------------------------
+
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Lab_8
+{
+    class SeatingArrangment
+    {
+        //Private array containing seat reservation data
+        private char[,] seatingArray;
+
+        //Allows read only access to data
+        public char[,] SeatingArray
+        {
+            get
+            {
+                return seatingArray;
+            }
+        }
+
+        //Constructor initializes array with given seat availability
+        public SeatingArrangment()
+        {
+            seatingArray = new char[,] { { 'O', 'X', 'X', 'X', 'X', 'X' },
+                                         { 'O', 'O', 'O', 'X', 'O', 'O' },
+                                         { 'X', 'X', 'X', 'X', 'X', 'O' },
+                                         { 'O', 'O', 'X', 'X', 'O', 'X' },
+                                         { 'O', 'O', 'O', 'O', 'O', 'O' }
+                                       };
+        }
+
+        //If entry is valid, replace an O with an X
+        public string MakeReservation(int[] seatArray)
+        {
+            int one = seatArray[0];
+            int two = seatArray[1];
+
+            //Return to menu
+            if (one == 9 || two == 9)
+            {
+                return String.Format("\nInvalid entry\n");
+            }
+
+            //Replace O with X
+            else if (seatingArray[one, two] == 'O')
+            {
+                seatingArray[one, two] = 'X';
+                return String.Format("\nThank you, your reservation has been created.\n");
+            }
+
+            //Return to menu if seat is already reserved
+            else
+            {
+                return String.Format("\nThere is already a reservation for this seat, please select another seat.\n");
+            }
+        }
+
+
+        //If entry is valid, replace X with O
+        public string CancelReservation(int[] seatArray)
+        {
+            int one = seatArray[0];
+            int two = seatArray[1];
+
+
+            //Return to menu
+            if ((one == 9) || (two == 9))
+            {
+                return String.Format("\nInvalid entry.\n");
+            }
+
+            //Replace X with O
+            else if (seatingArray[one, two] == 'X')
+            {
+                seatingArray[one, two] = 'O';
+                return String.Format("\nYour reservation has been cancelled.\n");
+            }
+
+            //Return to menu if there is no reservation for the seat
+            else
+            {
+                return String.Format("\nThere is no reservation for this seat, please select another seat.\n");
+            }
+        }
+
+        //Displays seat availability
+        public override string ToString()
+        {
+            string s = "\n  ABC DEF\n";
+
+            for (int i = 0; i < 5; i++)
+            {
+                s += (i + 1) + " ";
+                for (int j = 0; j < 6; j++)
+                {
+                    s += Char.ToString(seatingArray[i, j]);
+                    if (j == 2)
+                    {
+                        s += ' ';
+                    }
+                }
+                s += "\n";
+            }
+            
+            return String.Format(s);
+        }
+    }
+}
