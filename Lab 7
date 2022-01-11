@@ -1,0 +1,162 @@
+using System;
+using System.Security.Cryptography.X509Certificates;
+
+namespace Lab_7
+{
+    class MainProgram
+    {
+        static void Main(string[] args)
+        { 
+            //Initializes a week to store temperatures, and asks user for temperatures
+            WeeklyTemperatures weekOne = new WeeklyTemperatures(AskForTemps());
+
+            //Displays the temperatures and calculations based on those temperatures
+            Console.WriteLine("\n" + weekOne);
+            //Asks user for temperature, and determines and displays the days below that temp
+            Console.WriteLine(weekOne.NumDaysBelow(AskForLimit()));
+
+            Console.ReadKey();
+
+        }
+
+        //Gets weekly temps from user, and returns an array of the entered temps
+        public static int[] AskForTemps()
+        {
+            string[] day = new string[] { "Sunday", "Monday", "Tuesday", 
+                "Wednesday", "Thursday", "Friday", "Saturday" };
+            int[] temps = new int[7];
+
+            //Displays prompt to user, using days of the week
+            for (int i = 0; i < 7; i++)
+            {
+                Console.Write("Please enter the temperature for {0}: ", day[i]);
+                temps[i] = Convert.ToInt32(Console.ReadLine());
+            }
+
+            return temps;
+        }
+
+        //Gets one temperature from the user, and returns it
+        public static int AskForLimit()
+        {
+            Console.Write("\nIn order to see the number of days below a " +
+                "certain temperature, enter the temperature: ");
+            int limit = Convert.ToInt32(Console.ReadLine());
+            return limit; 
+        }
+
+    }
+}
+
+-----------------------------------------------------------------------------------
+
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Threading;
+
+namespace Lab_7
+{
+    class WeeklyTemperatures
+    {
+        //private properties
+        private int[] weeklyTempsArray;
+        private int[] sortedTempsArray;
+
+        //public accessors
+        public int[] WeeklyTempsArray
+        {
+            get 
+            { 
+                return weeklyTempsArray; 
+            }   
+        }
+
+        public int[] SortedTempsArray
+        {
+            get
+            {
+                return sortedTempsArray;
+            }
+        }
+
+        //default constructor
+        public WeeklyTemperatures()
+        {
+
+        }
+
+        //constructor that takes an array of temperatures as an argument
+        public WeeklyTemperatures(int[] temps)
+        {
+            weeklyTempsArray = new int[7];
+            weeklyTempsArray = temps;
+            sortedTempsArray = new int[7];
+            //make a separate array of the temperatures to sort
+            weeklyTempsArray.CopyTo(sortedTempsArray, 0);
+            Array.Sort(sortedTempsArray);
+        }
+
+        //Find and return the highest temp
+        public int HighestTemp()
+        {
+            return sortedTempsArray[6];
+        }
+
+        //Find and return the lowest temp
+        public int LowestTemp()
+        {
+            return sortedTempsArray[0];
+        }
+
+        //find and return the average temp
+        public decimal AverageTemp()
+        {
+            int sum = sortedTempsArray[0] + sortedTempsArray[1] + sortedTempsArray[2]
+                + sortedTempsArray[3] + sortedTempsArray[4] + sortedTempsArray[5] + sortedTempsArray[6];
+            decimal average = ((decimal) sum / 7);
+            return average;
+        }
+
+        //Find and return the average temp excluding the lowest temperature
+        public decimal HigherAvTemp()
+        {
+            int sum = sortedTempsArray[1] + sortedTempsArray[2] + sortedTempsArray[3] 
+                + sortedTempsArray[4] + sortedTempsArray[5] + sortedTempsArray[6];
+            decimal average = ((decimal) sum / 6);
+            return average;
+        }
+
+        //Find and return the number of days below the temperature given by the user
+        public string NumDaysBelow(int limit)
+        {
+            int count = 0;
+            for (int i = 0; i < 7; i++)
+            {
+                if (limit > weeklyTempsArray[i])
+                {
+                    count++;
+                }
+            }
+            return String.Format("\nThere are {0} days below {1}°F", count, limit);
+        }
+
+        //ToString override to display temperatures and caclulations in a three column format
+        public override string ToString()
+        {
+            return String.Format("Sunday\t\t{0}°F\t\tHighest temperature is {1}°F\n" +
+                                "Monday\t\t{2}°F\t\tLowest temperature is {3}°F\n" +
+                                "Tuesday\t\t{4}°F\t\tAverage temperature is {5:f1}°F\n" +
+                                "Wednesday\t{6}°F\t\tAverage temp excluding lowest temp is {7:f1}°F\n" +
+                                "Thurdsay\t{8}°F\t\tThe range of temperatures is from {9}°F to {10}°F\n" +
+                                "Friday\t\t{11}°F\n" +
+                                "Saturday\t{12}°F", 
+                weeklyTempsArray[0], HighestTemp(), weeklyTempsArray[1], LowestTemp(), weeklyTempsArray[2], 
+                AverageTemp(), weeklyTempsArray[3], HigherAvTemp(), weeklyTempsArray[4], LowestTemp(), 
+                HighestTemp(), weeklyTempsArray[5], weeklyTempsArray[6]);
+        }
+    }
+}
