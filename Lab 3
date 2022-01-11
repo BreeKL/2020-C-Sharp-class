@@ -1,0 +1,73 @@
+using System;
+class HelloWorld
+{
+    // Tax rates
+    public static double federalTaxRate = 0.156, stateTaxRate = 0.05, socialSecurityTaxRate = 0.0714;
+    // Declare Variables for Employee Info
+    public static string employeeName;
+    public static int employeeNumber, hoursWorked;
+    public static double payRate, grossIncome, netPay, minusFederal, minusState, minusSocial;
+
+    static void Main()
+    {
+        // Greet User
+        Console.WriteLine("Hello there and welcome to the Employee Information Program");
+        // Call Method to take employee input
+        takeEmployeeInput();
+        // Call Method to calcuate info based on user input
+        calculateInfo();
+        // CAll method to display info
+        displayInfo();
+        // Ensure that user has a good day
+        Console.WriteLine("Have a nice day!");
+    }
+
+    // Method for taking in user input, no type protection implemented
+    public static void takeEmployeeInput()
+    {
+        Console.Write("Input Employee Name: ");
+        employeeName = Console.ReadLine();
+        Console.Write("Input Employee Number: ");
+        employeeNumber = Convert.ToInt32(Console.ReadLine());
+        Console.Write("Input Hours Worked: ");
+        hoursWorked = Convert.ToInt32(Console.ReadLine());
+        Console.Write("Input rate of pay: ");
+        payRate = Convert.ToDouble(Console.ReadLine());
+        Console.WriteLine();
+    }
+
+    // Calcuate variables based on user-provided information
+    public static void calculateInfo()
+    {
+        // Calculate our variables
+        grossIncome = hoursWorked * payRate;
+        minusFederal = grossIncome * federalTaxRate;
+        minusSocial = grossIncome * socialSecurityTaxRate;
+        minusState = grossIncome * stateTaxRate;
+        netPay = grossIncome - minusFederal - minusSocial - minusState;
+        // Round all money values to two decimal points
+        grossIncome = Math.Round(grossIncome, 2);
+        minusFederal = Math.Round(minusFederal, 2);
+        minusSocial = Math.Round(minusSocial, 2);
+        minusState = Math.Round(minusState, 2);
+        netPay = Math.Round(netPay, 2);
+    }
+
+    // Display all relevant information to our user
+    public static void displayInfo()
+    {
+        Console.WriteLine("********************************************");
+        Console.WriteLine("Employee Name: {0}", employeeName);
+        Console.WriteLine("Employee Number: {0}", employeeNumber);
+        Console.WriteLine("Hours Worked: {0}", hoursWorked);
+        Console.WriteLine("Pay Rate: {0}", payRate);
+        Console.WriteLine("Calculated Gross Income: {0}", grossIncome);
+        Console.WriteLine("Social Security Withholding: ({0}) * ({1}) = {2}", grossIncome, socialSecurityTaxRate, minusSocial);
+        Console.WriteLine("Federal Withholding Tax: ({0}) * ({1}) = {2}", grossIncome, federalTaxRate, minusFederal);
+        Console.WriteLine("State Withholding Tax: ({0}) * ({1}) = {2}", grossIncome, stateTaxRate, minusState);
+        Console.WriteLine("Net Pay: {0}", netPay);
+        Console.WriteLine("********************************************\n");
+    }
+
+}
+
