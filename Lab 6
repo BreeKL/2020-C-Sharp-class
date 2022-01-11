@@ -1,0 +1,109 @@
+using System;
+
+namespace Lab_6
+{
+    class RetailPriceCalculator
+    {
+        static void Main(string[] args)
+        {
+            //Run program to caclulate retail price
+            DisplayInfo(TakeInfo());
+            Console.ReadKey();
+        }
+
+        static decimal TakeInfo()
+        {   
+            //Ask user for input and return that amount
+            Console.WriteLine("Please enter wholesale price: ");
+            decimal wholesalePrice = Decimal.Parse(Console.ReadLine());
+
+            return wholesalePrice;
+        }
+
+        static void DisplayInfo(decimal wholesalePrice)
+        {
+            //Display information to the user
+            RetailPrices retailPrice = new RetailPrices(wholesalePrice);
+
+            Console.WriteLine(retailPrice.ShowPercentages());
+            Console.WriteLine(retailPrice.CaclulateMarkup());
+            Console.WriteLine(retailPrice.CalculateRetail());
+        }
+    }
+}
+
+-----------------------------------------------------------------
+
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Lab_6
+{
+    //Stores the wholesale price, and calculates the markup amount and retail price
+    class RetailPrices
+    {
+        //Private class properties
+        private decimal wholesalePrice;
+
+        //public class properties
+        public decimal WholesalePrice
+        {
+            set 
+            {
+                wholesalePrice = value;
+            }
+            get
+            {
+                return wholesalePrice;
+            }
+        }
+
+        //default constructor
+        public RetailPrices()
+        {
+
+        }
+
+        //constructor with one argument
+        public RetailPrices(decimal wholesale)
+        {
+            wholesalePrice = wholesale;
+        }
+
+        //method that returns a string formatted to display percentages
+        public string ShowPercentages()
+        {
+            string percentages = "\t\t  5%  \t  6%  \t  7%  \t  8%  \t  9%  \t  10%";
+            return percentages;
+        }
+
+        //method to return a string formatted to show the markup amount
+        public string CaclulateMarkup()
+        {
+            decimal temp;
+            string result = "Mark up amount: ";
+            for (decimal i = 0; i < 6; i++)
+            {
+                //0.05, 0.06, 0.07, 0.08, 0.09, 0.10 times the wholesale price 
+                temp = ((i * (decimal) 0.01) + (decimal) 0.05) * wholesalePrice;
+                result += String.Format("{0:C} \t", temp);
+            }
+            return result;
+        }
+
+        //method to return a string formatted to show the retail price
+        public string CalculateRetail()
+        {
+            decimal temp;
+            string result = "Retail Price:   ";
+            for (decimal i = 0; i < 6; i++)
+            {
+                //0.05, 0.06, 0.07, 0.08, 0.09, 0.10 times the wholesale price, added to the wholesale price 
+                temp = (((i * (decimal)0.01) + (decimal)0.05) * wholesalePrice) + wholesalePrice;
+                result += String.Format("{0:C}\t", temp);
+            }
+            return result;
+        }
+    }
+}
