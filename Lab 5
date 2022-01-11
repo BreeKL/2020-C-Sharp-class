@@ -1,0 +1,182 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Security.Cryptography.X509Certificates;
+
+namespace Lab_5
+{
+    class PayrollSystemsUpgrade
+    {
+        static void Main(string[] args)
+        {
+            // Make employee instance
+            Employee employee1 = new Employee();
+            // Take user input to create class data
+            employee1.Create();
+            // Show information collected
+            Console.WriteLine(employee1.ToString());
+
+            // Make second employee instance
+            Employee employee2 = new Employee();
+            // Take user input to create class data
+            employee2.Create();
+            // Show information collected
+            Console.WriteLine(employee2.ToString());
+
+            // See if user wants to change pay rate and return result
+            Console.WriteLine("\nWould you like to modify pay rate? (Y or N) ");
+            string yesOrNo = Console.ReadLine();
+            yesOrNo.ToLower();
+            if (yesOrNo == "y")
+            {
+                Console.WriteLine("Which employee would you like to modify? (1 or 2) ");
+                Console.ReadKey();
+                Console.WriteLine("\n", employee1.ModifyPayRate());
+            }
+
+            // See if user wants to change employee type and return result after change
+            Console.WriteLine("\nWould you like to change employee type? (Y or N) ");
+            string noOrYes = Console.ReadLine();
+            noOrYes.ToLower();
+            if (noOrYes == "y")
+            {
+                Console.WriteLine("Which employee would you like to modify? (1 or 2) ");
+                string oneOrTwo = Console.ReadLine();
+                if (oneOrTwo == "1")
+                {
+                    Console.WriteLine("What would you like to change the employee type to? ");
+                    string newType = Console.ReadLine();
+                    employee1.ChangeEmployeeType(newType);
+                    Console.WriteLine(employee1.ToString());
+                }
+
+                else if (oneOrTwo == "2")
+                {
+                    Console.WriteLine("What would you like to change the employee type to? ");
+                    string newType = Console.ReadLine();
+                    employee2.ChangeEmployeeType(newType);
+                    Console.WriteLine(employee2.ToString());
+                }
+            }
+        }
+    }
+}
+
+
+--------------------------------------------------------
+
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Lab_5
+{
+    class Employee
+    {
+        private string firstName;
+        private string lastName;
+        private int eNumber;
+        private string eType;
+        private double payRate;
+
+        //access for other classes
+        public string FirstName
+        {
+            set
+            {
+                firstName = value;
+            }
+            get
+            {
+                return firstName;
+            }
+        }
+
+        public string LastName
+        {
+            set
+            {
+                lastName = value;
+            }
+            get
+            {
+                return lastName;
+            }
+        }
+
+        public int ENumber
+        {
+            set
+            {
+                eNumber = value;
+            }
+            get
+            {
+                return eNumber;
+            }
+        }
+
+        public string EType
+        {
+            set
+            {
+                eType = value;
+            }
+            get
+            {
+                return eType;
+            }
+        }
+
+        // payRate doesn't change
+        public double PayRate
+        {
+            get
+            {
+                return payRate;
+            }
+        }
+
+        //empty constructor
+        public Employee()
+        {
+
+        }
+
+        // Takes input from user and assigns each piece of data
+        public void Create()
+        {
+            Console.WriteLine("\nInput employee first name: ");
+            firstName = Console.ReadLine();
+            Console.WriteLine("Input employee last name: ");
+            lastName = Console.ReadLine();
+            Console.WriteLine("Input employee number: ");
+            eNumber = Int32.Parse(Console.ReadLine());
+            Console.WriteLine("Input type of employment (Hourly, Salary, or Commission): ");
+            eType = Console.ReadLine();
+            Console.WriteLine("Input employee payrate: ");
+            payRate = double.Parse(Console.ReadLine());
+        }
+
+        // Denies change to pay rate
+        public string ModifyPayRate()
+        {
+            return "You may not change pay rate.";
+        }
+        
+        // changes employee type
+        public void ChangeEmployeeType(string newType)
+        {
+            eType = newType;
+        }
+
+        // Allows print out of class data
+        public override string ToString()
+        {
+            return "\nEmployee name: " + firstName + " " + lastName +
+            "\nEmployee number: " + eNumber.ToString() +
+            "\nEmployee type: " + eType +
+            "\nPayrate: " + PayRate.ToString("C");
+        }
+    }
+}
